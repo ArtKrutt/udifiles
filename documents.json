@@ -1,0 +1,32 @@
+[
+  {
+    "id": "generelle-krav-til-drift-av-asylmottak",
+    "title": "Generelle krav til drift av asylmottak",
+    "description": "UDIs generelle krav til innkvartering, organisering, sikkerhet og beboerrettet arbeid i asylmottak.",
+    "updated": "februar 2023",
+    "keywords": [
+      "UDI", "asylmottak", "mottaksdrift", "generelle krav", "innkvartering",
+      "boforhold", "fellesarealer", "husregler", "brannsikkerhet", "brannvern",
+      "trygghet", "sikkerhet", "overnattingsbesøk", "økonomi", "rapportering",
+      "bemanning", "kompetanse", "tolk", "språkassistenter", "etiske retningslinjer",
+      "politi", "beboerrettet arbeid", "sårbare grupper", "spesielle behov", "dødsfall"
+    ],
+    "html": "generelle-krav-til-drift-av-asylmottak.html",
+    "markdown": "generelle-krav-til-drift-av-asylmottak.md",
+    "pdf": "generelle-krav-til-drift-av-asylmottak.pdf"
+  },
+  {
+    "id": "krav-til-drift-av-ordinare-plasser",
+    "title": "Krav til ordinære plasser",
+    "description": "UDIs krav til innkvartering, bemanning og beboerrettet arbeid ved asylmottak med ordinære plasser.",
+    "updated": "juli 2024",
+    "keywords": [
+      "UDI", "asylmottak", "ordinære plasser", "innkvartering", "boforhold",
+      "bemanning", "informasjonsarbeid", "returarbeid", "bosetting",
+      "beboermedvirkning", "fritidsaktiviteter", "barn og unge", "barnebase"
+    ],
+    "html": "krav-til-drift-av-ordinare-plasser.html",
+    "markdown": "krav-til-drift-av-ordinare-plasser.md",
+    "pdf": "krav-til-drift-av-ordinare-plasser.pdf"
+  }
+]

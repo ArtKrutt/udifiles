@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Søk i digitaliserte krav og rutiner for drift av asylmottak. Finn lesbar HTML, Markdown og original PDF.">
+  <meta name="keywords" content="UDI, asylmottak, mottaksdrift, generelle krav, innkvartering, brannsikkerhet, sikkerhet, beboere, sårbare grupper">
+  <link rel="alternate" type="application/json" href="documents.json" title="Maskinlesbar dokumentliste">
+  <title>Dokumentarkiv for asylmottak</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #24342f; background: #f6f8f6; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #176c59; }
+    a:hover { color: #0c4d3e; }
+    header { background: #123e34; color: white; padding: 20px max(24px, calc((100vw - 1100px) / 2)); }
+    header strong { font-size: 14px; text-transform: uppercase; letter-spacing: .08em; }
+    main { max-width: 1100px; margin: 0 auto; padding: clamp(42px, 7vw, 88px) 24px 100px; }
+    h1 { color: #153f34; font-size: clamp(34px, 5vw, 54px); letter-spacing: -.04em; line-height: 1.1; margin: 0 0 18px; }
+    .intro { font-size: 18px; line-height: 1.6; color: #52675c; max-width: 680px; margin: 0 0 40px; }
+    .search { display: block; max-width: 720px; }
+    .search span { display: block; font-weight: 650; margin-bottom: 10px; }
+    .search input { display: block; width: 100%; padding: 16px 18px; border: 1px solid #a7bdb0; border-radius: 9px; background: white; color: #24342f; font: inherit; font-size: 17px; }
+    .search input:focus { outline: 3px solid #8ac9b3; outline-offset: 2px; }
+    .hint { color: #65776d; font-size: 14px; margin: 12px 0 52px; }
+    .list-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; border-bottom: 1px solid #d6e1da; margin-bottom: 20px; }
+    h2 { color: #153f34; font-size: 25px; margin: 0 0 16px; }
+    #count { color: #65776d; font-size: 14px; }
+    .entry { background: white; border: 1px solid #dce5df; border-radius: 12px; padding: clamp(24px, 4vw, 36px); box-shadow: 0 10px 30px rgba(26, 62, 48, .045); margin-bottom: 16px; }
+    .entry h3 { font-size: 24px; line-height: 1.25; margin: 0 0 12px; }
+    .entry h3 a { text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    .entry p { line-height: 1.6; margin: 0 0 18px; }
+    .meta { font-size: 14px; color: #64766d; }
+    .keywords { display: flex; flex-wrap: wrap; gap: 7px; margin: 18px 0 24px; padding: 0; list-style: none; }
+    .keywords li { background: #eaf2ed; color: #285b49; border-radius: 5px; padding: 5px 9px; font-size: 13px; }
+    .links { display: flex; flex-wrap: wrap; gap: 18px; font-weight: 600; }
+    .empty { padding: 24px 0; color: #64766d; }
+    @media (max-width: 600px) { main { padding: 38px 18px 70px; } .hint { margin-bottom: 38px; } .list-heading { display: block; } #count { display: block; margin-bottom: 14px; } }
+  </style>
+</head>
+<body>
+  <header><strong>Dokumentarkiv</strong></header>
+  <main>
+    <h1>Krav til drift av asylmottak</h1>
+    <p class="intro">Finn digitaliserte UDI-dokumenter om mottaksdrift. Åpne en lesbar nettside eller original PDF, eller last ned Markdown-kilden.</p>
+    <label class="search" for="query"><span>Søk i dokumenter og emner</span><input id="query" type="search" placeholder="Prøv brannsikkerhet, bemanning eller sårbare grupper" autocomplete="off"></label>
+    <p class="hint">Søket bruker dokumentenes titler, beskrivelser og emneord.</p>
+    <div class="list-heading"><h2>Dokumenter</h2><span id="count" role="status" aria-live="polite"></span></div>
+    <div id="results"><p>Laster dokumentlisten …</p></div>
+    <noscript><p>JavaScript kreves for søk. Åpne <a href="generelle-krav-til-drift-av-asylmottak.html">Generelle krav til drift av asylmottak</a> eller <a href="krav-til-drift-av-ordinare-plasser.html">Krav til ordinære plasser</a> direkte.</p></noscript>
+  </main>
+  <script>
+    const query = document.getElementById('query');
+    const results = document.getElementById('results');
+    const count = document.getElementById('count');
+    let documents = [];
+
+    const normalize = text => text.toLocaleLowerCase('no')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/æ/g, 'ae').replace(/ø/g, 'o');
+
+    function render() {
+      const terms = normalize(query.value).trim().split(/\s+/).filter(Boolean);
+      const matches = documents.filter(doc => {
+        const searchable = normalize([doc.title, doc.description, ...doc.keywords].join(' '));
+        return terms.every(term => searchable.includes(term));
+      });
+      count.textContent = `${matches.length} ${matches.length === 1 ? 'dokument' : 'dokumenter'}`;
+      results.replaceChildren();
+      if (!matches.length) {
+        const message = document.createElement('p');
+        message.className = 'empty';
+        message.textContent = 'Ingen dokumenter traff søket.';
+        results.append(message);
+        return;
+      }
+      for (const doc of matches) {
+        const article = document.createElement('article');
+        article.className = 'entry';
+        const title = document.createElement('h3');
+        const mainLink = document.createElement('a');
+        mainLink.href = doc.html;
+        mainLink.textContent = doc.title;
+        title.append(mainLink);
+        const description = document.createElement('p');
+        description.textContent = doc.description;
+        const updated = document.createElement('p');
+        updated.className = 'meta';
+        updated.textContent = `Oppdatert ${doc.updated}`;
+        const keywords = document.createElement('ul');
+        keywords.className = 'keywords';
+        for (const keyword of doc.keywords) {
+          const tag = document.createElement('li');
+          tag.textContent = keyword;
+          keywords.append(tag);
+        }
+        const links = document.createElement('div');
+        links.className = 'links';
+        for (const [label, path] of [['Les dokumentet', doc.html], ['Markdown', doc.markdown], ['Original PDF', doc.pdf]]) {
+          const link = document.createElement('a');
+          link.href = path;
+          link.textContent = label;
+          if (label === 'Markdown') link.download = path;
+          links.append(link);
+        }
+        article.append(title, description, updated, keywords, links);
+        results.append(article);
+      }
+    }
+
+    fetch('documents.json')
+      .then(response => { if (!response.ok) throw new Error('Dokumentlisten kunne ikke lastes.'); return response.json(); })
+      .then(data => { documents = data; render(); })
+      .catch(error => { results.textContent = `${error.message} Åpne siden fra en webserver.`; });
+    query.addEventListener('input', render);
+  </script>
+</body>
+</html>
